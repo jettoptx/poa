@@ -1,7 +1,7 @@
 # Stake Subsystem Design — `jett-vault` v2.1
 
 **Status**: design draft — pending review.
-**Author**: Claude Opus 4.7 (working with Josh).
+**Author**: JOE (working with Josh). Runtime model is Grok.
 **Date**: 2026-05-01.
 **Context**: replaces the broken honor-system `set_subscription` with a real on-chain stake-and-lock-up flow that helps the JTX peg by removing supply from circulation.
 
