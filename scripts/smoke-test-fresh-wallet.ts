@@ -22,6 +22,8 @@ import {
   sendAndConfirmTransaction,
 } from "@solana/web3.js";
 import * as fs from "fs";
+import * as os from "os";
+import * as path from "path";
 import * as crypto from "crypto";
 
 const PROGRAM_ID = new PublicKey("JTX5uXTiZ1M3hJkjv5Cp5F8dr3Jc7nhJbQjCFmgEYA7");
@@ -61,8 +63,12 @@ async function fetchPythUpdate(): Promise<string> {
 
 async function main() {
   const conn = new Connection("https://api.devnet.solana.com", "confirmed");
-  const founder = loadKeypair("/Users/jettoptx/OPTX/founder-wallet-keypair.json");
-  const deployer = loadKeypair("/Users/jettoptx/.config/solana/id.json");
+  const founderPath = process.env.FOUNDER_KEYPAIR;
+  if (!founderPath) throw new Error("Set FOUNDER_KEYPAIR to a keypair json file");
+  const founder = loadKeypair(founderPath);
+  const deployer = loadKeypair(
+    process.env.SOLANA_KEYPAIR ?? path.join(os.homedir(), ".config", "solana", "id.json"),
+  );
 
   // Resume mode: --resume <path> uses an existing keypair (skips earlier
   // steps automatically via PDA existence checks). Otherwise generates fresh.
@@ -74,7 +80,7 @@ async function main() {
   } else {
     testWallet = Keypair.generate();
     console.log("Fresh test wallet:", testWallet.publicKey.toBase58());
-    const savePath = `/Users/jettoptx/OPTX/devnet-smoke-${Date.now()}.json`;
+    const savePath = path.join(os.tmpdir(), `devnet-smoke-${Date.now()}.json`);
     fs.writeFileSync(savePath, JSON.stringify(Array.from(testWallet.secretKey)));
     console.log("Saved to:", savePath);
   }
@@ -199,9 +205,7 @@ async function main() {
 
   // ─── Step 4: mint_donor_nft via Pyth Solana Receiver SDK ─────────────────
   console.log("\n[4/4] mint_donor_nft (with fresh Pyth SOL/USD update)…");
-  const { PythSolanaReceiver } = await import(
-    "/Users/jettoptx/OPTX/joe-jettopics-saas/node_modules/@pythnetwork/pyth-solana-receiver"
-  );
+  const { PythSolanaReceiver } = await import("@pythnetwork/pyth-solana-receiver");
   const receiver = new (PythSolanaReceiver as any)({
     connection: conn,
     wallet: userProvider.wallet,

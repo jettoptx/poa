@@ -74,7 +74,7 @@ async function main() {
   const res = await fetch(`${HERMES}/v2/updates/price/latest?ids[]=${PYTH_SOL_USD_FEED_ID.replace(/^0x/, "")}&encoding=base64`);
   const updateData = ((await res.json()) as any).binary.data[0];
 
-  const { PythSolanaReceiver } = await import("/Users/jettoptx/OPTX/joe-jettopics-saas/node_modules/@pythnetwork/pyth-solana-receiver");
+  const { PythSolanaReceiver } = await import("@pythnetwork/pyth-solana-receiver");
   const receiver = new (PythSolanaReceiver as any)({ connection: conn, wallet: provider.wallet });
   const txBuilder = receiver.newTransactionBuilder({ closeUpdateAccounts: true });
   await txBuilder.addPostPriceUpdates([updateData]);

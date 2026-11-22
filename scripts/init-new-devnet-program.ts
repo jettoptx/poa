@@ -15,6 +15,8 @@ import {
   Connection, Keypair, PublicKey, SystemProgram,
 } from "@solana/web3.js";
 import * as fs from "fs";
+import * as os from "os";
+import * as path from "path";
 import * as crypto from "crypto";
 
 const PROGRAM_ID = new PublicKey("CFXw63o3bH6mRHukLF495rKaU1bp5eqbnyVT3xNFitsz");
@@ -38,8 +40,12 @@ function load(p: string): Keypair {
 
 async function main() {
   const conn = new Connection("https://api.devnet.solana.com", "confirmed");
-  const founder = load("/Users/jettoptx/OPTX/founder-wallet-keypair.json");
-  const deployer = load("/Users/jettoptx/.config/solana/id.json");
+  const founderPath = process.env.FOUNDER_KEYPAIR;
+  if (!founderPath) throw new Error("Set FOUNDER_KEYPAIR to a keypair json file");
+  const founder = load(founderPath);
+  const deployer = load(
+    process.env.SOLANA_KEYPAIR ?? path.join(os.homedir(), ".config", "solana", "id.json"),
+  );
 
   // IDL points at the source declare_id! (mainnet ID). We override the
   // anchor Program's programId when constructing it so the right addresses

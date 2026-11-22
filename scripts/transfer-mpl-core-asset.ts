@@ -1,9 +1,7 @@
 /**
  * Transfer an mpl-core asset via raw TransferV1 ix.
  *
- * Used to deliver a CLI-minted founder NFT into Josh's JOE agent Phantom
- * wallet so he can SEE a real wallet-visible JTX Genesis Receipt while
- * we debug his browser-side mint failure separately.
+ * Delivers a CLI-minted asset to the recipient in TO.
  *
  * Account ordering from generated IDL (transferV1.js):
  *   0 asset           (writable)
@@ -38,9 +36,13 @@ function loadKeypair(p: string): Keypair {
 
 async function main() {
   const conn = new Connection("https://api.devnet.solana.com", "confirmed");
-  const owner = loadKeypair(process.env.WALLET ?? `${process.env.HOME}/OPTX/founder-wallet-keypair.json`);
+  const walletPath = process.env.WALLET;
+  const recipient = process.env.TO;
+  if (!walletPath) throw new Error("Set WALLET to a keypair json file");
+  if (!recipient) throw new Error("Set TO to the recipient pubkey");
+  const owner = loadKeypair(walletPath);
   const asset = new PublicKey(process.env.ASSET ?? "DfwnZ4owq8q4j2cQVCUyqAH7Cit9pQzmwephJ8ZjBctS");
-  const to = new PublicKey(process.env.TO ?? "EFvgELE1Hb4PC5tbPTAe8v1uEDGee8nwYBMCU42bZRGk");
+  const to = new PublicKey(recipient);
 
   console.log("Transfer mpl-core asset:");
   console.log("  asset:", asset.toBase58());

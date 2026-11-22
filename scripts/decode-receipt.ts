@@ -11,8 +11,10 @@ const DONOR = new PublicKey("6RDd3LrkU1tfM1xiAVLHEeDVZyu3rF2dF76yWGs7cLpS");
 
 async function main() {
   const conn = new Connection("https://api.devnet.solana.com", "confirmed");
+  const founderPath = process.env.FOUNDER_KEYPAIR;
+  if (!founderPath) throw new Error("Set FOUNDER_KEYPAIR to a keypair json file");
   const founder = Keypair.fromSecretKey(
-    Uint8Array.from(JSON.parse(fs.readFileSync("/Users/jettoptx/OPTX/founder-wallet-keypair.json", "utf8")))
+    Uint8Array.from(JSON.parse(fs.readFileSync(founderPath, "utf8")))
   );
   const provider = new AnchorProvider(conn, new Wallet(founder), { commitment: "confirmed" });
   const idl = JSON.parse(fs.readFileSync("./target/idl/jett_vault.json", "utf8"));

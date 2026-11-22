@@ -46,6 +46,7 @@ import { Transaction } from "@solana/web3.js"
 import { BankrunProvider } from "anchor-bankrun"
 import { expect } from "chai"
 import { createHash } from "crypto"
+import * as path from "path"
 
 import { JettVault } from "../target/types/jett_vault"
 
@@ -142,7 +143,7 @@ describe("jett-vault v2.1 — bankrun post-expiry unstake (case d)", function ()
     // we declare. Pass empty programs/accounts arrays — the SDK auto-loads
     // from Anchor.toml / target/deploy.
     context = await startAnchor(
-      "/Users/jettoptx/OPTX/astroknots-stack/jettoptx-poa-depin",
+      path.resolve(__dirname, ".."),
       [{ name: "jett_vault", programId: VAULT_PROGRAM_ID }],
       [
         // Pre-fund our test wallets with 100 SOL each.

@@ -14,9 +14,9 @@
  *   ts-node scripts/bootstrap-devnet-agt.ts <user_pubkey>
  *   ts-node scripts/bootstrap-devnet-agt.ts  (uses CLI default keypair)
  *
- * Pays from: /Users/jettoptx/OPTX/founder-wallet-keypair.json (signs as
- * `user` for AGT) AND /Users/jettoptx/.config/solana/id.json (signs as
- * `aaron_operator` — any signer is accepted on-chain today).
+ * Pays from FOUNDER_KEYPAIR (signs as `user` for AGT) and SOLANA_KEYPAIR
+ * (signs as `aaron_operator` — any signer is accepted on-chain today).
+ * SOLANA_KEYPAIR defaults to the CLI keypair at ~/.config/solana/id.json.
  *
  * If you pass an external pubkey, only the AARON audit is created (the
  * external wallet must sign create_agt_attestation themselves from the
@@ -32,6 +32,8 @@ import {
   SystemProgram,
 } from "@solana/web3.js";
 import * as fs from "fs";
+import * as os from "os";
+import * as path from "path";
 import * as crypto from "crypto";
 
 const PROGRAM_ID = new PublicKey(
@@ -68,9 +70,13 @@ async function main() {
   const conn = new Connection("https://api.devnet.solana.com", "confirmed");
 
   // Founder pays for AGT (must sign as `user` because of the PDA seed).
-  const founder = loadKeypair("/Users/jettoptx/OPTX/founder-wallet-keypair.json");
+  const founderPath = process.env.FOUNDER_KEYPAIR;
+  if (!founderPath) throw new Error("Set FOUNDER_KEYPAIR to a keypair json file");
+  const founder = loadKeypair(founderPath);
   // Deployer pays for AARON audit (any signer is accepted on-chain).
-  const deployer = loadKeypair("/Users/jettoptx/.config/solana/id.json");
+  const deployer = loadKeypair(
+    process.env.SOLANA_KEYPAIR ?? path.join(os.homedir(), ".config", "solana", "id.json"),
+  );
 
   // Target wallet — if an arg is passed, we only do the AARON audit on
   // their already-created AGT. Otherwise default to the founder so

@@ -67,7 +67,9 @@ async function fetchPythUpdate(): Promise<string> {
 
 async function main() {
   const conn = new Connection("https://api.devnet.solana.com", "confirmed");
-  const founder = loadKeypair("/Users/jettoptx/OPTX/founder-wallet-keypair.json");
+  const founderPath = process.env.FOUNDER_KEYPAIR;
+  if (!founderPath) throw new Error("Set FOUNDER_KEYPAIR to a keypair json file");
+  const founder = loadKeypair(founderPath);
   const provider = new AnchorProvider(conn, new Wallet(founder), { commitment: "confirmed" });
 
   const lamports = BigInt(Math.round(parseFloat(process.env.DONATE_SOL ?? "0.05") * LAMPORTS_PER_SOL));
@@ -138,9 +140,7 @@ async function main() {
 
   console.log("\n[2/2] Calling mint_donor_nft (with fresh Pyth update)…");
   // Lazy-require to keep this file ts-checkable without the optional dep at top.
-  const { PythSolanaReceiver } = await import(
-    "/Users/jettoptx/OPTX/joe-jettopics-saas/node_modules/@pythnetwork/pyth-solana-receiver"
-  );
+  const { PythSolanaReceiver } = await import("@pythnetwork/pyth-solana-receiver");
 
   const receiver = new (PythSolanaReceiver as any)({
     connection: conn,

@@ -14,7 +14,7 @@
  *   ts-node --transpile-only scripts/mint-b310-nft.ts
  *
  * Env:
- *   WALLET=/path/to/keypair.json      defaults to ~/OPTX/founder-wallet-keypair.json
+ *   WALLET=/path/to/keypair.json      required
  *   DONATE_SOL=0.1                    only used if donor PDA doesn't exist yet
  */
 
@@ -78,7 +78,8 @@ async function refreshAaronAudit(wallet: string): Promise<void> {
 
 async function main() {
   const conn = new Connection(RPC_URL, "confirmed");
-  const walletPath = process.env.WALLET ?? `${process.env.HOME}/OPTX/founder-wallet-keypair.json`;
+  const walletPath = process.env.WALLET;
+  if (!walletPath) throw new Error("Set WALLET to a keypair json file");
   const user = loadKeypair(walletPath);
   console.log("Signer:", user.publicKey.toBase58());
 
@@ -151,14 +152,8 @@ async function main() {
   const assetKp = Keypair.generate();
   console.log("  asset (NFT address):", assetKp.publicKey.toBase58());
 
-  // Use Pyth Solana Receiver SDK from the joe-jettopics-saas node_modules to
-  // build the post + consumer + close bundle.
-  const { PythSolanaReceiver } = await import(
-    "/Users/jettoptx/OPTX/joe-jettopics-saas/node_modules/@pythnetwork/pyth-solana-receiver"
-  );
-  const { Wallet, AnchorProvider } = await import(
-    "/Users/jettoptx/OPTX/joe-jettopics-saas/node_modules/@coral-xyz/anchor"
-  );
+  const { PythSolanaReceiver } = await import("@pythnetwork/pyth-solana-receiver");
+  const { Wallet, AnchorProvider } = await import("@coral-xyz/anchor");
 
   const provider = new (AnchorProvider as any)(conn, new (Wallet as any)(user), {
     commitment: "confirmed",
