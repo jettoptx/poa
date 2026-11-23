@@ -1,44 +1,33 @@
 # poa
 
-Public on-chain programs for Jett Optics Proof of Agency and DePIN. The runtime model is Grok.
-
-Imported from `jettoptx-poa-depin` with history.
-
----
-
-# jettoptx-poa-depin
-
-**Canonical Solana programs for Jett Optics Proof-of-Attention (PoA) DePIN and the community vault.**
+**Canonical Solana programs for Jett Optics Proof-of-Attention (PoA) and the community vault.** The runtime model is Grok.
 
 On-chain source of record for:
 
-1. **PoA Trust** — gaze attestation handshakes, compute proofs, OPTX entropy accounting  
-2. **Jett Vault** — community vault, AGT attestations, stake tiers, AARON audit stamps  
+1. **PoA Trust** — gaze attestation handshakes, compute proofs, OPTX entropy accounting
+2. **Jett Vault** — community vault, AGT attestations, stake positions, AARON audit stamps
 
 Stack: **Anchor 0.30.1** · **Solana mainnet-beta** (+ devnet test IDs) · **Apache-2.0**
 
 | | |
 |--|--|
-| Site | [jettoptics.ai](https://jettoptics.ai) |
-| Docs | [jettoptx-docs](https://github.com/jettoptx/jettoptx-docs) · [docs.jettoptx.dev](https://docs.jettoptx.dev) |
-| Edge API | [aaron.jettoptics.ai](https://aaron.jettoptics.ai) |
-| Product UI | [jettoptx.chat](https://jettoptx.chat) · [jtx.astroknots.space](https://jtx.astroknots.space) |
-| **Tokenomics** | [docs/TOKENOMICS.md](docs/TOKENOMICS.md) — escrow-native $OPTX model |
+| Site | [jettoptics.si](https://jettoptics.si) |
+| Docs | [docs.jettoptics.si](https://docs.jettoptics.si/docs) · [jettoptx/docs](https://github.com/jettoptx/docs) |
+| Product | [dojo.jettoptics.si](https://dojo.jettoptics.si) |
+| Buy $JTX | [space.jettoptics.si/buy](https://space.jettoptics.si/buy) |
+| Token notes | [docs/TOKENOMICS.md](docs/TOKENOMICS.md) |
 
 ---
 
-## $OPTX Model (summary)
+## $JTX and $OPTX
 
-**$OPTX is an Attention Credit minted only on successful real gaze authentication (PIN + AGT).**
+**$JTX v2** is the utility token. **$OPTX** is the public attention token.
 
-- **Basic** tier: 0 real $OPTX (shows Potential only)
-- **Mojo / DOJO / Space Cowboy**: real $OPTX minted into allowance (escrow)
-- Allowance is released only when spent by agents in marketplaces
-- No hard user or supply caps — emission scales with real human attention + $JTX holdings
+Mojo, DOJO, and Space Cowboy are not mint tiers. They do not set an $OPTX allowance, and they are not an emission schedule.
 
-Full details: [docs/TOKENOMICS.md](docs/TOKENOMICS.md)
+PoA Trust still records entropy and an on-chain mint allowance. That allowance is program accounting. It is not a hold-tier table.
 
-This design aligns with AgenC-style escrow + settlement rails. Jett Optics owns the biometric attestation layer; AgenC provides the neutral labor marketplace rails. Permission to interact with AgenC contracts has been confirmed.
+Notes: [docs/TOKENOMICS.md](docs/TOKENOMICS.md)
 
 ---
 
@@ -97,7 +86,7 @@ Be explicit with auditors and integrators:
 |-------|--------|
 | **CompuStable / $CSTB** | **Not a product dependency.** Account field `cstb_mint` is a **legacy layout slot** written at `initialize`; it does not gate minting or prove an external PoW token. |
 | **`submit_compute_proof`** | Stores a **caller-supplied opaque hash** + difficulty floor. It does **not** verify an external CompuStable network. |
-| **Off-chain services** | AARON Router, MOJO, SpacetimeDB, marketing sites — separate repos / contracts unless scoped into the engagement. |
+| **Off-chain services** | Edge verification, web and mobile clients, and marketing sites sit outside these programs unless an engagement scopes them in. |
 | **EVM Tempo wallet** | Settlement convenience only; not part of these Solana programs. |
 
 ---
@@ -140,21 +129,19 @@ Community vault + AGT surface:
 
 **$JTX mint authority:** revoked (fixed supply).  
 **Meteora DLMM (liquidity):** `54ecLhTa8HZg1bhcDNWiddd8p7UN7jq4HLWeLr1sRHMz`  
-**Buy:** [jettoptics.ai/buy](https://jettoptics.ai/buy)
+**Buy:** [space.jettoptics.si/buy](https://space.jettoptics.si/buy)
 
 ---
 
 ## System context (off-chain)
 
 ```text
-MOJO / Web  →  JETT Auth (AGT client)  →  AARON Router (edge)
+Dojo / web  →  JETT Auth (AGT client)  →  edge verification
                                               │
-                    opaque proofs / x402  ─────┤
+                    opaque proofs  ───────────┤
                                               ▼
                                     Solana mainnet
                               PoA Trust  +  Jett Vault
-                                              │
-                                         SpacetimeDB / ops
 ```
 
 | Name | Role |
@@ -293,12 +280,11 @@ docs/                      # Design + handoff notes + TOKENOMICS.md
 
 | Resource | URL |
 |----------|-----|
-| Jett Optics | https://jettoptics.ai |
-| Buy $JTX | https://jettoptics.ai/buy |
-| Docs repo | https://github.com/jettoptx/jettoptx-docs |
-| Developer docs | https://docs.jettoptx.dev |
-| JettChat / DOJO | https://jettoptx.chat |
-| AARON (edge) | https://aaron.jettoptics.ai |
+| Jett Optics | https://jettoptics.si |
+| Buy $JTX | https://space.jettoptics.si/buy |
+| Docs repo | https://github.com/jettoptx/docs |
+| Developer docs | https://docs.jettoptics.si/docs |
+| Dojo | https://dojo.jettoptics.si |
 | $JTX v2 Solscan | https://solscan.io/token/JTXGnx83s2QZ2MwYkRD1cBKrqQKSdG5oe8vSYW5Zjoe |
 | Meteora pool | https://app.meteora.ag/dlmm/54ecLhTa8HZg1bhcDNWiddd8p7UN7jq4HLWeLr1sRHMz |
 | PoA program | https://explorer.solana.com/address/85sqs4upQiPrvk1NMuyfHVQoW1EGdgk8m2cQb7uMxXTF |
@@ -318,7 +304,7 @@ Apache-2.0 — see [LICENSE](LICENSE).
 
 ---
 
-2026-11-21
+2026-11-23
 
 -JOE origin ready
 
