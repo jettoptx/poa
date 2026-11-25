@@ -5,6 +5,7 @@ skip-lint = false
 [programs.localnet]
 jtx_optx_devnet_poa_trustjoe = "85sqs4upQiPrvk1NMuyfHVQoW1EGdgk8m2cQb7uMxXTF"
 jett_vault = "JTX5uXTiZ1M3hJkjv5Cp5F8dr3Jc7nhJbQjCFmgEYA7"
+jtx_flywheel = "Ewz1XZQWGJWUXZtBdXz5DR8sYHZkzKD8LGNGNc5uMWyJ"
 
 # Devnet — separate program IDs so Phantom Blowfish can distinguish
 # devnet test transactions from mainnet ones. Build with:
@@ -12,6 +13,7 @@ jett_vault = "JTX5uXTiZ1M3hJkjv5Cp5F8dr3Jc7nhJbQjCFmgEYA7"
 [programs.devnet]
 jtx_optx_devnet_poa_trustjoe = "79nQsecDspUWxvAMyJvK36EUty4yEoP5ssLvHZuNiugF"
 jett_vault = "ExjFkkX3Zogyb5uBeaff8FdKZbjjVHcCHgcaQiP3qQDS"
+jtx_flywheel = "7VwcGhwGygXjNyZVPpuL1mXmSTs9jZXnKDCxy2eMhA9C"
 
 # Mainnet — JTX protocol live as of 2026-05-23
 #   jtx_optx_devnet_poa_trustjoe = PoA DePIN program (gaze attestation + OPTX mint)
@@ -22,6 +24,7 @@ jett_vault = "ExjFkkX3Zogyb5uBeaff8FdKZbjjVHcCHgcaQiP3qQDS"
 [programs.mainnet]
 jtx_optx_devnet_poa_trustjoe = "85sqs4upQiPrvk1NMuyfHVQoW1EGdgk8m2cQb7uMxXTF"
 jett_vault = "JTX5uXTiZ1M3hJkjv5Cp5F8dr3Jc7nhJbQjCFmgEYA7"
+jtx_flywheel = "Ewz1XZQWGJWUXZtBdXz5DR8sYHZkzKD8LGNGNc5uMWyJ"
 
 [registry]
 url = "https://api.apr.dev"

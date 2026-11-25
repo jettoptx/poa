@@ -31,6 +31,7 @@ yarn-error.log*
 *.json.bak
 id.json
 keypair.json
+keys/*.json
 
 # Deployment info (optional - may want to track)
 # deployments/

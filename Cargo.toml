@@ -11,6 +11,9 @@ overflow-checks = true
 lto = "fat"
 codegen-units = 1
 
+[profile.release.package.jtx-flywheel]
+opt-level = 3
+
 [profile.release.build-override]
 opt-level = 3
 incremental = false
